@@ -1,0 +1,65 @@
+/ you can use includes, for example:
+//
+#include <algorithm>
+#include <vector>
+// you can write to stdout for debugging purposes, e.g.
+// cout << "this is a debug message" << endl;
+
+int solution(int K, vector<int> &C, vector<int> &D) {
+    // write your code in C++14 (g++ 6.2.0)
+    
+    int cleanPair=0;
+    int oneCleanOneDirty =0;
+    int dirtyPair =0;
+    vector<int> cleansocks(51,0);
+    vector<int> dirtysocks(51,0);
+    
+    for(auto i:C)
+    {
+        cleansocks[i]++;
+    }
+    
+    for(auto i:D)
+    {
+        dirtysocks[i]++;
+    }
+    
+    for(auto it=cleansocks.begin();it!=cleansocks.end();it++)
+    {
+        cleanPair += *it/2;
+        *it = *it%2;
+    }
+    
+    auto itdirty = dirtysocks.begin();
+    for(auto it=cleansocks.begin();it!=cleansocks.end();it++)
+    {
+        
+        if(*it!=0 && *itdirty!=0)
+        {
+            int tmp;
+            tmp = min(*it,*itdirty);
+            oneCleanOneDirty+=tmp;
+            *it-=tmp;
+            *itdirty-=tmp;
+        }
+        itdirty++;
+    }
+    
+    for(auto i:dirtysocks)
+    {
+        dirtyPair+=i/2;
+    }
+    
+    int tmp=0;
+   
+    tmp=min(K,oneCleanOneDirty);
+    K=K-tmp;
+    cleanPair+=tmp;
+    dirtyPair = dirtyPair*2;
+    tmp=min(K,dirtyPair);
+    cleanPair+=tmp/2;
+    
+    
+    return cleanPair;
+
+}
